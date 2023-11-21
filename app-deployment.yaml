@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - name: sample-app
+        image: 917024903431.dkr.ecr.us-east-1.amazonaws.com/ci-cd-tutorial-sample-app:latest
+        ports:
+        - containerPort: 8000
