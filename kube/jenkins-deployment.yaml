@@ -21,25 +21,45 @@ spec:
     spec:
       serviceAccountName: jenkins
       containers:
-      - name: jenkins
-        image: jenkins/jenkins:2.235.1-lts-alpine
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: JAVA_OPTS
-          value: -Xmx2048m -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        - containerPort: 50000
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /var/jenkins_home
-          name: jenkins
+        - name: jenkins
+          image: denisdugar/my-jenkins:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: JAVA_OPTS
+              value: -Xmx2048m -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
+            - name: DOCKER_HOST
+              value: tcp://localhost:2375
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 50000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/jenkins_home
+              name: jenkins
+
+        - name: docker-dind
+          image: docker:dind
+          securityContext:
+            privileged: true
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: ""
+          ports:
+            - containerPort: 2375
+              protocol: TCP
+          volumeMounts:
+            - name: docker-graph-storage
+              mountPath: /var/lib/docker
+
       restartPolicy: Always
       securityContext:
         runAsUser: 0
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: jenkins
-        persistentVolumeClaim:
-          claimName: jenkins-claim
+        - name: jenkins
+          persistentVolumeClaim:
+            claimName: jenkins-claim
+        - name: docker-graph-storage
+          emptyDir: {}
+

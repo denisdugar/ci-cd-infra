@@ -6,11 +6,11 @@ metadata:
   region: us-east-1
 
 vpc:
-  id: "vpc-01b221e2b1809a1fb"
+  id: "vpc-009d5c399664c1490"
   subnets:
     private:
-      us-east-1a: { id: "subnet-052cf6bcc682dd73c" }
-      us-east-1b: { id: "subnet-0613913fffb0466b8" }
+      us-east-1a: { id: "subnet-05f03241a5f755939" }
+      us-east-1b: { id: "subnet-098ffcc16e9aca9e3" }
 
 nodeGroups:
   - name: ng-1
@@ -18,5 +18,5 @@ nodeGroups:
     desiredCapacity: 2
     privateNetworking: true
     subnets:
-      - "subnet-052cf6bcc682dd73c"
-      - "subnet-0613913fffb0466b8"
+      - "subnet-05f03241a5f755939"
+      - "subnet-098ffcc16e9aca9e3"
